@@ -7,6 +7,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using FilmesAPI.Models;
 using FilmesAPI.Data;
+using FilmesAPI.Data.DTOs;
 
 namespace FilmesAPI
 {
@@ -22,8 +23,17 @@ namespace FilmesAPI
         }
 
         [HttpPost]
-        public IActionResult adicionaFilme([FromBody] Filme filme)
+        public IActionResult adicionaFilme([FromBody] CreateFilmeDto filmeDto)
         {
+
+            Filme filme = new Filme 
+            { 
+                Titulo = filmeDto.Titulo,
+                Director = filmeDto.Director,
+                Genero = filmeDto.Genero,
+                Duracao = filmeDto.Duracao
+            };
+
             _context.Filmes.Add(filme);
             _context.SaveChanges();
             return CreatedAtAction(nameof(RecuperarFilmePorId), new { Id = filme.Id}, filme);
@@ -41,13 +51,23 @@ namespace FilmesAPI
             Filme filme = _context.Filmes.FirstOrDefault(filme => filme.Id == id);   
             if(filme != null)
             {
-                return Ok(filme);
+                ReadFilmeDto filmeDto = new ReadFilmeDto
+                {
+                    Id = filme.Id,
+                    Titulo = filme.Titulo,
+                    Genero = filme.Genero,
+                    Director = filme.Director,
+                    Duracao = filme.Duracao,
+                    HoraConsulta = DateTime.Now
+
+                };
+                return Ok(filmeDto);
             }
 
             return NotFound();
         }
         [HttpPut("{id}")]
-        public IActionResult AlterarFilme(int id, [FromBody] Filme filmeNovo) 
+        public IActionResult AlterarFilme(int id, [FromBody] UpdateFilmeDto filmeNovo) 
         {
             Filme filme = _context.Filmes.FirstOrDefault(f => f.Id == id);
             if (filme == null)
