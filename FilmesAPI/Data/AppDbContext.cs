@@ -20,8 +20,8 @@ namespace FilmesAPI.Data.DTOs
 
         public DbSet<Filme> Filmes { get; set; }
         public DbSet<Models.Cinema> Cinemas { get; set; }
-        
         public DbSet<Models.Endereco> Enderecos { get; set; }
+        public DbSet<Models.Gerente> Gerentes { get; set; }
 
     }
 }
