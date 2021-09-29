@@ -27,10 +27,10 @@ namespace FilmesAPI.Controllers
         [HttpPost]
         public IActionResult AdicionaGerente(CreateGerenteDto novoGerente) 
         {
-            Gerente g = _mapper.Map<Gerente>(novoGerente);
-            _context.Gerentes.Add(g);
+            Gerente gerente = _mapper.Map<Gerente>(novoGerente);
+            _context.Gerentes.Add(gerente);
             _context.SaveChanges();
-            return CreatedAtAction(nameof(RecuperaGerentePorId), new { Id = g.Id }, g);
+            return CreatedAtAction(nameof(RecuperaGerentePorId), new { Id = gerente.Id }, gerente);
         }
 
         [HttpGet("{id}")]

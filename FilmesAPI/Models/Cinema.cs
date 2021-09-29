@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
 namespace FilmesAPI.Models
@@ -16,5 +17,9 @@ namespace FilmesAPI.Models
       
         public virtual Endereco Endereco { get; set; }
         public int EnderecoId { get; set; }
+        [JsonIgnore]
+        public virtual Gerente Gerente { get; set; }
+        [JsonIgnore]
+        public virtual int GerenteId { get; set; }
     }
 }

@@ -45,7 +45,7 @@ namespace FilmesAPI.Controllers
             Models.Cinema cinema = _context.Cinemas.FirstOrDefault(cinema => cinema.Id == id);
             if (cinema != null)
             {
-                UpdateGerenteDto cinemaDto = _mapper.Map<UpdateGerenteDto>(cinema);
+                UpdateCinemaDto cinemaDto = _mapper.Map<UpdateCinemaDto>(cinema);
                 return Ok(cinemaDto);
             }
 
