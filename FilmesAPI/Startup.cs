@@ -1,5 +1,6 @@
 using FilmesAPI.Data;
 using FilmesAPI.Data.DTOs;
+using FilmesAPI.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
@@ -25,7 +26,9 @@ namespace FilmesAPI
         {
             //services.AddDbContext<FilmeContext>(opts => opts.UseMySQL(Configuration.GetConnectionString("FilmeConnection")));
             services.AddDbContext<AppDbContext>(opts => opts.UseLazyLoadingProxies().UseSqlServer(Configuration.GetConnectionString("FilmeConnection")));
-            
+
+            services.AddScoped<FilmeService, FilmeService>();
+            services.AddScoped<CinemaService, CinemaService>();
             services.AddControllers();
             services.AddSwaggerGen(c =>
             {
