@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using FilmesAPI.Data.DTOs;
 using FilmesAPI.Data.DTOs.Cinema;
+using FilmesAPI.Models;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -34,9 +35,24 @@ namespace FilmesAPI.Controllers
         }
 
         [HttpGet]
-        public IEnumerable<Models.Cinema> RecuperarCinemas()
+        public IActionResult RecuperarCinemas([FromQuery] string nomeFilme)
         {
-            return _context.Cinemas;
+            List<Cinema> cinemas = _context.Cinemas.ToList();
+            if (cinemas == null)
+                return NotFound();
+            else
+            {
+                if (!string.IsNullOrEmpty(nomeFilme))
+                {
+                    IEnumerable<Cinema> query = from cinema in cinemas
+                            where cinema.Sessoes.Any(sessao => sessao.Filme.Titulo == nomeFilme)
+                            select cinema;
+                    cinemas = query.ToList();
+                }
+
+                List<ReadCinemaDto> dto = _mapper.Map<List<ReadCinemaDto>>(cinemas);
+                return Ok(dto);
+            }
         }
 
         [HttpGet("{id}")]

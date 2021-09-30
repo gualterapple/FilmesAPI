@@ -44,5 +44,10 @@ namespace FilmesAPI.Controllers
             return NotFound();
             
         }
+        [HttpGet]
+        public IEnumerable<Sessao> recuperarSessoes() 
+        {
+            return _context.Sessoes;
+        }
     }
 }
