@@ -1,4 +1,6 @@
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 
 namespace FilmesAPI.Models
 {
@@ -15,5 +17,10 @@ namespace FilmesAPI.Models
         public string Genero { get; set; }
         [Range(1, 600, ErrorMessage = "A duração minima é de 1 e a máxima de 600")]
         public int Duracao { get; set; }
+        public virtual List<Cinema> Cinemas { get; set; }
+        [JsonIgnore]
+        public virtual List<Sessao> Sessoes { get; set; }
+
+
     }
 }
