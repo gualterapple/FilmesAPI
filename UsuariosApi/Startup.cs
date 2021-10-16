@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
@@ -5,7 +6,9 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.IdentityModel.Tokens;
 using System;
+using System.Text;
 using UsuariosApi.Data;
 using UsuariosApi.Services;
 
@@ -23,6 +26,7 @@ namespace UsuariosApi
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+
             //Adicionando o contexto.
             services.AddDbContext<UserDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("UsuarioConnection")));
             //services.AddDbContext<UserDbContext>(options => options.MySQL(Configuration.GetConnectionString("FilmeConnection")));
@@ -30,6 +34,24 @@ namespace UsuariosApi
             //Adicionando o Identity.
             services.AddIdentity<IdentityUser<int>, IdentityRole<int>>()
                 .AddEntityFrameworkStores<UserDbContext>();
+
+            services.AddAuthentication(x => {
+                x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+                x.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+            }).AddJwtBearer(jwt => {
+                jwt.SaveToken = true;
+                jwt.TokenValidationParameters = new TokenValidationParameters
+                {
+
+                    ValidateIssuer = false,
+                    ValidateAudience = false,
+                    ValidateIssuerSigningKey = true,
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("Gualter-web-api-security-authentication-value")),
+                    ClockSkew = TimeSpan.FromMinutes(50)
+
+                };
+            });
 
             services.AddScoped<CadastroService, CadastroService>();
             services.AddScoped<LoginService, LoginService>();
@@ -41,6 +63,8 @@ namespace UsuariosApi
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "UsuariosApi", Version = "v1" });
             });*/
+
+            
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -56,6 +80,8 @@ namespace UsuariosApi
             app.UseHttpsRedirection();
 
             app.UseRouting();
+
+            app.UseAuthentication();
 
             app.UseAuthorization();
 

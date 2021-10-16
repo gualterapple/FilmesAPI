@@ -1,14 +1,17 @@
 using FilmesAPI.Data;
 using FilmesAPI.Data.DTOs;
 using FilmesAPI.Services;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System;
+using System.Text;
 
 namespace FilmesAPI
 {
@@ -24,8 +27,27 @@ namespace FilmesAPI
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddAuthentication(x => {
+                x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+                x.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+            }).AddJwtBearer(jwt => {
+                jwt.SaveToken = true;
+                jwt.TokenValidationParameters = new TokenValidationParameters
+                {
+
+                    ValidateIssuer = false,
+                    ValidateAudience = false,
+                    ValidateIssuerSigningKey = true,
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("Gualter-web-api-security-authentication-value")),
+                    ClockSkew = TimeSpan.FromMinutes(50)
+
+                };
+            });
+
             //services.AddDbContext<FilmeContext>(opts => opts.UseMySQL(Configuration.GetConnectionString("FilmeConnection")));
-            services.AddDbContext<AppDbContext>(opts => opts.UseLazyLoadingProxies().UseSqlServer(Configuration.GetConnectionString("FilmeConnection")));
+            services.AddDbContext<AppDbContext>(opts => opts.UseLazyLoadingProxies()
+            .UseSqlServer(Configuration.GetConnectionString("FilmeConnection")));
 
             services.AddScoped<FilmeService, FilmeService>();
             services.AddScoped<CinemaService, CinemaService>();
@@ -50,6 +72,8 @@ namespace FilmesAPI
             app.UseHttpsRedirection();
 
             app.UseRouting();
+
+            app.UseAuthentication();
 
             app.UseAuthorization();
 

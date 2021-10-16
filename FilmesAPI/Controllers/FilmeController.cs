@@ -11,11 +11,13 @@ using FilmesAPI.Data.DTOs;
 using AutoMapper;
 using FilmesAPI.Services;
 using FluentResults;
+using Microsoft.AspNetCore.Authorization;
 
 namespace FilmesAPI
 {
     [ApiController]
     [Route("[controller]")]
+    [Authorize]
     public class FilmeController : ControllerBase
     {
         private FilmeService _filmeService;

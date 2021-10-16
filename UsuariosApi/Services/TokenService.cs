@@ -20,7 +20,7 @@ namespace UsuariosApi.Services
             };
 
             var chave = new SymmetricSecurityKey(
-                Encoding.UTF8.GetBytes("0asdjas09djsa09djasdjsadajsd09asjd09sajcnzxn"));
+                Encoding.UTF8.GetBytes("Gualter-web-api-security-authentication-value"));
 
             var credenciais = new SigningCredentials(chave, SecurityAlgorithms.HmacSha256);
 

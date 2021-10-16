@@ -1,5 +1,7 @@
 ﻿
 using FluentResults;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -10,8 +12,9 @@ using UsuariosApi.Services;
 
 namespace UsuariosApi.Controllers
 {
-    [Route("[controller]")]
     [ApiController]
+    [Route("[controller]")]
+    [Authorize]
     public class CadastroController: ControllerBase
     {
         private CadastroService _cadastroService;
@@ -28,6 +31,12 @@ namespace UsuariosApi.Controllers
             if(resultado.IsSuccess)
             return Ok();
             return StatusCode(500);
+        }
+
+        [HttpGet]
+        public IActionResult TestAuthorization()
+        {
+            return Ok("You're Authorized");
         }
     }
 }
