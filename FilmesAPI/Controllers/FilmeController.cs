@@ -12,12 +12,14 @@ using AutoMapper;
 using FilmesAPI.Services;
 using FluentResults;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Cors;
 
 namespace FilmesAPI
 {
     [ApiController]
     [Route("[controller]")]
-    [Authorize]
+    //[Authorize]
+    [EnableCors("gualterPolicy")]
     public class FilmeController : ControllerBase
     {
         private FilmeService _filmeService;

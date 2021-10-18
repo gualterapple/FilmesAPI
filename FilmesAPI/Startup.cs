@@ -51,12 +51,16 @@ namespace FilmesAPI
 
             services.AddScoped<FilmeService, FilmeService>();
             services.AddScoped<CinemaService, CinemaService>();
+
+            services.AddCors(options => options.AddPolicy("gualterPolicy", builder => builder.WithOrigins("*")));
             services.AddControllers();
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "FilmesAPI", Version = "v1" });
             });
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -73,9 +77,11 @@ namespace FilmesAPI
 
             app.UseRouting();
 
-            app.UseAuthentication();
+            app.UseCors("gualterPolicy");
 
             app.UseAuthorization();
+
+            app.UseAuthentication();
 
             app.UseEndpoints(endpoints =>
             {
