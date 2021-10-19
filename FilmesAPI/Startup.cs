@@ -52,7 +52,8 @@ namespace FilmesAPI
             services.AddScoped<FilmeService, FilmeService>();
             services.AddScoped<CinemaService, CinemaService>();
 
-            services.AddCors(options => options.AddPolicy("gualterPolicy", builder => builder.WithOrigins("*")));
+            services.AddCors(options => options.AddPolicy("gualterPolicy", builder => builder.WithOrigins("*").AllowAnyHeader()
+                                                  .AllowAnyMethod()));
             services.AddControllers();
             services.AddSwaggerGen(c =>
             {
@@ -79,9 +80,10 @@ namespace FilmesAPI
 
             app.UseCors("gualterPolicy");
 
+            app.UseAuthentication();
+
             app.UseAuthorization();
 
-            app.UseAuthentication();
 
             app.UseEndpoints(endpoints =>
             {

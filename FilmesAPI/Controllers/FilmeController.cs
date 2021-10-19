@@ -18,7 +18,7 @@ namespace FilmesAPI
 {
     [ApiController]
     [Route("[controller]")]
-    //[Authorize]
+    [Authorize]
     [EnableCors("gualterPolicy")]
     public class FilmeController : ControllerBase
     {
