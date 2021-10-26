@@ -2,6 +2,7 @@
 using FilmesAPI.Data.DTOs;
 using FilmesAPI.Models;
 using FluentResults;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -61,6 +62,38 @@ namespace FilmesAPI.Services
                 return filmeDto;
             }
 
+            return null;
+        }
+        
+        public List<ReadFilmeDto> RecuperarFilmesFilter(FilmeFilter filmeDto)
+        {
+
+            List<Filme> filmes = null;
+
+            if (filmeDto == null)
+            {
+                filmes = _context.Filmes.ToList();
+            }
+            else
+            {
+                if(!string.IsNullOrEmpty(filmeDto.Titulo))
+                filmes = _context.Filmes.Where
+                    (filme => filme.Titulo.Contains(filmeDto.Titulo)).ToList();
+
+                if(!string.IsNullOrEmpty(filmeDto.Director))
+                filmes = _context.Filmes.Where
+                    (filme => filme.Titulo.Contains(filmeDto.Director)).ToList();
+                
+                if(!string.IsNullOrEmpty(filmeDto.Genero))
+                filmes = _context.Filmes.Where
+                    (filme => filme.Titulo.Contains(filmeDto.Genero)).ToList();
+            }
+
+            if (filmes != null)
+            {
+                List<ReadFilmeDto> readFilmeDtos = _mapper.Map<List<ReadFilmeDto>>(filmes);
+                return readFilmeDtos;
+            }
             return null;
         }
 

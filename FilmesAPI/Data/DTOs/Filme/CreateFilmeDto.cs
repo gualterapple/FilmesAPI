@@ -15,6 +15,8 @@ namespace FilmesAPI.Data.DTOs
         [StringLength(30, ErrorMessage = "O gênero n pode ser maior que {1} caracters")]
         public string Genero { get; set; }
         [Range(1, 600, ErrorMessage = "A duração minima é de 1 e a máxima de 600")]
+
+        public string Capa { get; set; }
         public int ClassificacaoEtaria { get; set; }
         public int Duracao { get; set; }
     }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -20,7 +21,21 @@ namespace FilmesAPI.Data.DTOs
         [Range(1, 600, ErrorMessage = "A duração minima é de 1 e a máxima de 600")]
         public int Duracao { get; set; }
         public int ClassificacaoEtaria { get; set; }
-
+        public string Capa { get; set; }
+        public string ImageFullPath
+        {
+            get
+            {
+                if (string.IsNullOrEmpty(this.Capa))
+                {
+                    return null;
+                }
+            
+                //return $"https://apiirecord.azurewebsites.net{this.Capa.Substring(1)}";
+                return Path.Combine(Directory.GetCurrentDirectory(), "Uploads\\capas", this.Capa.Substring(1));
+                //return @"C:/Users/gualter.sebastiao/source/repos/FilmesAPI/FilmesAPI/Uploads/capas"+this.Capa.Substring(1);
+            }
+        }
         public DateTime HoraConsulta { get; set; }
     }
 }
