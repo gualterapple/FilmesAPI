@@ -15,6 +15,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.StaticFiles;
+using System.Linq.Dynamic.Core;
 
 namespace FilmesAPI
 {
@@ -31,10 +32,17 @@ namespace FilmesAPI
             _filmeService = filmeService;
         }
 
-        [HttpPost]
+        [HttpPost("filmeECapa")]
         public IActionResult adicionaFilme([FromForm] CreateFilmeDto filmeDto, [FromForm] IFormFile capa)
         {
             filmeDto.Capa = WriteFileAndGetName(capa);
+            ReadFilmeDto dto = _filmeService.adicionaFilme(filmeDto);
+            return CreatedAtAction(nameof(RecuperarFilmePorId), new { Id = dto.Id}, dto);
+        }
+        
+        [HttpPost]
+        public IActionResult adicionaFilme([FromBody] CreateFilmeDto filmeDto)
+        {
             ReadFilmeDto dto = _filmeService.adicionaFilme(filmeDto);
             return CreatedAtAction(nameof(RecuperarFilmePorId), new { Id = dto.Id}, dto);
         }
@@ -62,11 +70,14 @@ namespace FilmesAPI
         }
         
         [HttpGet("buscarFilmes")]
-        public IActionResult RecuperarFilmePorFiltro([FromQuery] FilmeFilter filmeDto) 
+        public IActionResult RecuperarFilmePorFiltro([FromQuery] FilmeFilter filmeDto, [FromQuery] string ordem) 
         {
             List<ReadFilmeDto> readDto = _filmeService.RecuperarFilmesFilter(filmeDto);
             if (readDto != null)
-            return Ok(readDto);
+            if(ordem == "asc")
+            return Ok(readDto.OrderBy(c => c.Titulo));
+            if(ordem == "desc")
+            return Ok(readDto.OrderByDescending(c => c.Titulo));
             return NotFound();
         }
 

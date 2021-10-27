@@ -2,11 +2,10 @@
 using FilmesAPI.Data.DTOs;
 using FilmesAPI.Models;
 using FluentResults;
-using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
+using System.Linq.Dynamic.Core;
 
 namespace FilmesAPI.Services
 {
@@ -82,11 +81,11 @@ namespace FilmesAPI.Services
 
                 if(!string.IsNullOrEmpty(filmeDto.Director))
                 filmes = _context.Filmes.Where
-                    (filme => filme.Titulo.Contains(filmeDto.Director)).ToList();
+                    (filme => filme.Director.Contains(filmeDto.Director)).ToList();
                 
                 if(!string.IsNullOrEmpty(filmeDto.Genero))
                 filmes = _context.Filmes.Where
-                    (filme => filme.Titulo.Contains(filmeDto.Genero)).ToList();
+                    (filme => filme.Genero.Contains(filmeDto.Genero)).ToList();
             }
 
             if (filmes != null)
@@ -96,6 +95,7 @@ namespace FilmesAPI.Services
             }
             return null;
         }
+
 
         public Result AlterarFilme(int id, UpdateFilmeDto filmeNovo)
         {
