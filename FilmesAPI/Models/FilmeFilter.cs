@@ -1,4 +1,5 @@
-﻿using System;
+﻿using FilmesAPI.Data.DTOs;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -7,7 +8,7 @@ namespace FilmesAPI.Models
 {
     public static class LivroFiltroExtensions
     {
-        public static IQueryable<Filme> AplicaFiltro(this IQueryable<Filme> query, FilmeFilter filtro)
+        public static IQueryable<ReadFilmeDto> AplicaFiltro(this IQueryable<ReadFilmeDto> query, FilmeFilter filtro)
         {
             if (filtro != null)
             {

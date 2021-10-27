@@ -70,14 +70,17 @@ namespace FilmesAPI
         }
         
         [HttpGet("buscarFilmes")]
-        public IActionResult RecuperarFilmePorFiltro([FromQuery] FilmeFilter filmeDto, [FromQuery] string ordem) 
+        public IActionResult RecuperarFilmePorFiltro(
+            [FromQuery] FilmeFilter filter,
+            [FromQuery] FilmeOrdem ordem,
+            [FromQuery] FilmesPaginacao paginacao) 
         {
-            List<ReadFilmeDto> readDto = _filmeService.RecuperarFilmesFilter(filmeDto);
+            IQueryable<ReadFilmeDto> readDto = 
+                _filmeService.RecuperarFilmesFilter(filter)
+                .AplicaFiltro(filter)
+                .AplicarOrdem(ordem);
             if (readDto != null)
-            if(ordem == "asc")
-            return Ok(readDto.OrderBy(c => c.Titulo));
-            if(ordem == "desc")
-            return Ok(readDto.OrderByDescending(c => c.Titulo));
+            return Ok(readDto.ToFilmePaginado(paginacao));
             return NotFound();
         }
 

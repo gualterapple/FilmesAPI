@@ -64,7 +64,7 @@ namespace FilmesAPI.Services
             return null;
         }
         
-        public List<ReadFilmeDto> RecuperarFilmesFilter(FilmeFilter filmeDto)
+        public IQueryable<ReadFilmeDto> RecuperarFilmesFilter(FilmeFilter filmeDto)
         {
 
             List<Filme> filmes = null;
@@ -91,7 +91,8 @@ namespace FilmesAPI.Services
             if (filmes != null)
             {
                 List<ReadFilmeDto> readFilmeDtos = _mapper.Map<List<ReadFilmeDto>>(filmes);
-                return readFilmeDtos;
+
+                return readFilmeDtos.AsQueryable();
             }
             return null;
         }
